@@ -1,20 +1,20 @@
+/*
+ * Pullup button wiring : GND => button => IO
+ */
 
 #include "button.h"
 #define BUTTON_NULL (-1)
 
-/*
- Pullup button wiring :
- GND => button => pin
- */
 static int8_t gPrevButton = BUTTON_NULL;
 
 // ====================================================================================
 #pragma mark - HARDWARE BUTTON SCAN
 // ====================================================================================
 
-void HW_SetupButton(SButtonData * aButton, uint8_t aPin, uint16_t aLongpressDelay, button_cb_t aCallback) {
+void HW_SetupButton(SButtonData * aButton, EButtonType aType, uint8_t aPin, uint16_t aLongpressDelay, button_cb_t aCallback) {
     pinMode(aPin, INPUT_PULLUP);
     aButton->pin = aPin;
+    aButton->type = aType;
     aButton->callback = aCallback;
     aButton->longpress = false;
     aButton->longpressDelay = aLongpressDelay;
@@ -32,6 +32,7 @@ static void HW_OnButtonReleased(SButtonData * aButton) {
         }
         else {
             // unlongpress
+            aButton->callback(aButton->pin, EButtonUnlongpress);
             aButton->longpress = false;
         }
         gPrevButton = BUTTON_NULL;
