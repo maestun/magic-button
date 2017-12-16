@@ -6,7 +6,7 @@
             "request": "launch",
             "cwd": "${workspaceRoot}",
             "name": "PlatformIO Debugger",
-            "target": "/Users/olivier/dev/perso/magicbypass/.pioenvs/attiny45/firmware.elf",
+            "target": "/Users/olivier/dev/embedded/magic-button/.pioenvs/pro16MHzatmega328/firmware.elf",
             "gdbpath": "/Users/olivier/.platformio/penv/bin/piodebuggdb",
             "autorun": [ "source .pioinit" ]
         }

@@ -8,12 +8,13 @@
  *
  */
 #include <stdint.h>
+#include <Arduino.h>
 
 typedef enum EButtonScanResult {
     EButtonUp = 0,      // off, idle state
     EButtonDown,        // button is pressed
     EButtonClick,       // down then up events happened < longpress time
-    EButtonLongpress    // button help down for > longpress time
+    EButtonLongpress,   // button help down for > longpress time
     EButtonUnlongpress  // button up from longpress
 } EButtonScanResult;
 
