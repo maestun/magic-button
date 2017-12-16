@@ -41,8 +41,8 @@ void onButtonEvent(uint8_t aPin, EButtonScanResult aResult) {
     if(aResult == EButtonDown) {
         // button down: toggle fx on if it wasn't
         dprintln(F("DOWN"));
-        fx_on = !fx_on;
-        FX_Toggle(fx_on, false);
+        // fx_on = !fx_on;
+        // FX_Toggle(fx_on, false);
     }
     else if(aResult == EButtonLongpress) {
         // button longpressed: switch to temporary mode
@@ -58,12 +58,15 @@ void onButtonEvent(uint8_t aPin, EButtonScanResult aResult) {
     else if(aResult == EButtonClick) {
         // button clicked: ignore
         dprintln(F("CLICK"));
+        fx_on = !fx_on;
+        FX_Toggle(fx_on, false);
+
     }
     else if(aResult == EButtonUp && fx_on) {
         // button released from shortpress: turn fx off if it was on
         dprintln(F("UP"));
-        fx_on = false;
-        FX_Toggle(false, false);
+        // fx_on = false;
+        // FX_Toggle(false, false);
     }
 }
 
