@@ -38,11 +38,18 @@ void FX_Toggle(bool aON, bool aTemp) {
 // ============================================================================
 void onButtonEvent(uint8_t aPin, EButtonScanResult aResult) {
     static bool fx_on = false;
+    static bool fx_disable = false;
     if(aResult == EButtonDown) {
         // button down: toggle fx on if it wasn't
         dprintln(F("DOWN"));
-        // fx_on = !fx_on;
-        // FX_Toggle(fx_on, false);
+        if(!fx_on) {
+            fx_on = true;
+            fx_disable = false;
+            FX_Toggle(true, false);
+        }
+        else {
+            fx_disable = true;   
+        }
     }
     else if(aResult == EButtonLongpress) {
         // button longpressed: switch to temporary mode
@@ -58,15 +65,15 @@ void onButtonEvent(uint8_t aPin, EButtonScanResult aResult) {
     else if(aResult == EButtonClick) {
         // button clicked: ignore
         dprintln(F("CLICK"));
-        fx_on = !fx_on;
-        FX_Toggle(fx_on, false);
-
+        if(fx_on && fx_disable) {
+            fx_on = false;
+            FX_Toggle(false, false);
+        }
     }
-    else if(aResult == EButtonUp && fx_on) {
+    else if(aResult == EButtonUp) {
         // button released from shortpress: turn fx off if it was on
         dprintln(F("UP"));
-        // fx_on = false;
-        // FX_Toggle(false, false);
+        
     }
 }
 

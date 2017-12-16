@@ -2,7 +2,7 @@
  * User event => callback event
  * ----------------------------
  * Press button => EButtonDown
- * Release button (before longpress time) => EButtonClick
+ * Release button (before longpress time) => EButtonUp then EButtonClick
  * Keep button pressed for lonpress time => EButtonLongpress
  * Release button (after longpress time) => EButtonUnlongpress
  *

@@ -27,6 +27,7 @@ static void HW_OnButtonReleased(SButtonData * aButton) {
         // aButton->callback(aButton->pin, EButtonUp);
         // unclick
         if(aButton->longpress == false) {
+            aButton->callback(aButton->pin, EButtonUp);
             aButton->callback(aButton->pin, EButtonClick);
         }
         else {
