@@ -11,7 +11,6 @@
 #define     AUDIO_CUT_MS            (20)
 
 SButtonData gButton;
-bool        gEffectON;
 
 
 // ============================================================================
@@ -39,11 +38,11 @@ void FX_Toggle(bool aON, bool aTemp) {
 // ============================================================================
 void onButtonEvent(uint8_t aPin, EButtonScanResult aResult) {
     static bool fx_on = false;
-    if(aResult == EButtonDown && !fx_on) {
+    if(aResult == EButtonDown) {
         // button down: toggle fx on if it wasn't
         dprintln(F("DOWN"));
-        fx_on = true;
-        FX_Toggle(true, false);
+        fx_on = !fx_on;
+        FX_Toggle(fx_on, false);
     }
     else if(aResult == EButtonLongpress) {
         // button longpressed: switch to temporary mode
@@ -52,6 +51,7 @@ void onButtonEvent(uint8_t aPin, EButtonScanResult aResult) {
     }
     else if(aResult == EButtonUnlongpress) {
         // button released from longpress, turn fx off
+        fx_on = false;
         dprintln(F("UNLONG"));
         FX_Toggle(false, false);
     }

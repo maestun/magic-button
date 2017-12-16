@@ -24,7 +24,7 @@ void HW_SetupButton(SButtonData * aButton, uint8_t aPin, uint16_t aLongpressDela
 static void HW_OnButtonReleased(SButtonData * aButton) {
 
     if(aButton->pin == gPrevButton) {
-        aButton->callback(aButton->pin, EButtonUp);
+        // aButton->callback(aButton->pin, EButtonUp);
         // unclick
         if(aButton->longpress == false) {
             aButton->callback(aButton->pin, EButtonClick);

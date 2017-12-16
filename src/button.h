@@ -2,9 +2,9 @@
  * User event => callback event
  * ----------------------------
  * Press button => EButtonDown
- * Release button (before longpress time) => EButtonUp, then EButtonClick
+ * Release button (before longpress time) => EButtonClick
  * Keep button pressed for lonpress time => EButtonLongpress
- * Release button (after longpress time) => EButtonUp, then EButtonUnlongpress
+ * Release button (after longpress time) => EButtonUnlongpress
  *
  */
 #include <stdint.h>
