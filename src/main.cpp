@@ -4,7 +4,7 @@
 
 #define     PIN_BYPASS_IN           (6)
 #define     PIN_OCTOCOUPLER         (2)
-#define     PIN_LED_TOGGLE          (13)
+#define     PIN_LED_TOGGLE          (11)
 #define     PIN_LED_TEMP            (12)
 #define     PIN_RELAY               (5)
 #define     LONGPRESS_THRESHOLD_MS  (1000)
