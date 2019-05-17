@@ -4,36 +4,35 @@
  */
 
 #include "button.h"
-#define BUTTON_NULL (-1)
 
 
-static int8_t gPrevButton = BUTTON_NULL;
+static const int8_t BUTTON_NULL = -1;
+static int8_t gPrevButton       = BUTTON_NULL;
 
 
-void HW_SetupButton(SButtonData * aButton, uint8_t aPin, uint16_t aLongpressDelay, button_cb_t aCallback) {
+Button::Button(uint8_t aPin, uint16_t aLongpressDelay, button_cb_t aCallback) {
     pinMode(aPin, INPUT);
-    aButton->pin = aPin;
-    aButton->callback = aCallback;
-    aButton->longpress = false;
-    aButton->longpressDelay = aLongpressDelay;
-    aButton->longpressTS = 0;
+    pin = aPin;
+    longpress = false;
+    longpressDelay = aLongpressDelay;
+    longpressTS = 0;
+    callback = aCallback;
     gPrevButton = BUTTON_NULL;
 }
 
 
-static void HW_OnButtonReleased(SButtonData * aButton) {
+void Button::onButtonReleased() {
 
-    if(aButton->pin == gPrevButton) {
-        // aButton->callback(aButton->pin, EButtonUp);
+    if(pin == gPrevButton) {
         // unclick
-        if(aButton->longpress == false) {
-            aButton->callback(aButton->pin, EButtonUp);
-            aButton->callback(aButton->pin, EButtonClick);
+        if(longpress == false) {
+            callback(pin, EButtonUp);
+            callback(pin, EButtonClick);
         }
         else {
             // unlongpress
-            aButton->callback(aButton->pin, EButtonUnlongpress);
-            aButton->longpress = false;
+            callback(pin, EButtonUnlongpress);
+            longpress = false;
         }
         gPrevButton = BUTTON_NULL;
     }
@@ -41,32 +40,32 @@ static void HW_OnButtonReleased(SButtonData * aButton) {
 
 
 // TODO: implement debounce filter !!
-static void HW_OnButtonPressed(SButtonData * aButton) {
+void Button::onButtonPressed() {
 
     // previous code w/ longpress detection
-    if(aButton->pin == gPrevButton) {
+    if(pin == gPrevButton) {
         // same pin still pressed
-        if(aButton->longpress == false && (millis() - aButton->longpressTS) >= aButton->longpressDelay) {
-            aButton->longpress = true;
-            aButton->callback(aButton->pin, EButtonLongpress);
+        if(longpress == false && (millis() - longpressTS) >= longpressDelay) {
+            longpress = true;
+            callback(pin, EButtonLongpress);
         }
     }
     else {
         // new button pressed
-        aButton->callback(aButton->pin, EButtonDown);
-        aButton->longpressTS = millis();
-        gPrevButton = aButton->pin;
+        callback(pin, EButtonDown);
+        longpressTS = millis();
+        gPrevButton = pin;
     }
 }
 
 
-void HW_ScanButton(SButtonData * aButton) {
-    if(digitalRead(aButton->pin) == true) {
+void Button::scan() {
+    if(digitalRead(pin) == true) {
         // pressed
-        HW_OnButtonPressed(aButton);
+        onButtonPressed();
     }
     else {
         // released
-        HW_OnButtonReleased(aButton);
+        onButtonReleased();
     }
 }

@@ -18,16 +18,19 @@ typedef enum EButtonScanResult {
     EButtonUnlongpress  // button up from longpress
 } EButtonScanResult;
 
-// event_callback(pin, event)
 typedef void (*button_cb_t)(uint8_t, EButtonScanResult);
 
-typedef struct SButtonData {
+
+class Button {
+private:
     uint8_t     pin;
     bool        longpress;
     uint32_t    longpressTS;
     uint16_t    longpressDelay;
     button_cb_t callback;
-} SButtonData;
-
-void HW_SetupButton(SButtonData * aButton, uint8_t aPin, uint16_t aLongpressDelay, button_cb_t aCallback);
-void HW_ScanButton(SButtonData * aButton);
+    void onButtonReleased();
+    void onButtonPressed();
+public:
+    Button(uint8_t aPin, uint16_t aLongpressDelay, button_cb_t aCallback);
+    void scan();
+};
