@@ -1,6 +1,6 @@
 #include "button.h"
 
-class Optoloop {
+class Optoloop : public ButtonListener {
 private:
     Button *    button;
     uint8_t     octocoupler_pin;

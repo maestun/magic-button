@@ -20,17 +20,21 @@ typedef enum EButtonScanResult {
 
 typedef void (*button_cb_t)(uint8_t, EButtonScanResult);
 
+class ButtonListener {
+public:
+    virtual void onButtonEvent(uint8_t aPin, EButtonScanResult aResult) = 0;
+};
 
 class Button {
 private:
-    uint8_t     pin;
-    bool        longpress;
-    uint32_t    longpressTS;
-    uint16_t    longpressDelay;
-    button_cb_t callback;
-    void onButtonReleased();
-    void onButtonPressed();
+    uint8_t             pin;
+    bool                longpress;
+    uint32_t            longpressTS;
+    uint16_t            longpressDelay;
+    ButtonListener *    listener;
+    void                onButtonReleased();
+    void                onButtonPressed();
 public:
-    Button(uint8_t aPin, uint16_t aLongpressDelay, button_cb_t aCallback);
+    Button(uint8_t aPin, uint16_t aLongpressDelay, ButtonListener * aListener);
     void scan();
 };

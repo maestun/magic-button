@@ -10,13 +10,13 @@ static const int8_t BUTTON_NULL = -1;
 static int8_t gPrevButton       = BUTTON_NULL;
 
 
-Button::Button(uint8_t aPin, uint16_t aLongpressDelay, button_cb_t aCallback) {
+Button::Button(uint8_t aPin, uint16_t aLongpressDelay, ButtonListener * aListener) {
     pinMode(aPin, INPUT);
     pin = aPin;
     longpress = false;
     longpressDelay = aLongpressDelay;
     longpressTS = 0;
-    callback = aCallback;
+    listener = aListener;
     gPrevButton = BUTTON_NULL;
 }
 
@@ -26,12 +26,12 @@ void Button::onButtonReleased() {
     if(pin == gPrevButton) {
         // unclick
         if(longpress == false) {
-            callback(pin, EButtonUp);
-            callback(pin, EButtonClick);
+            listener->onButtonEvent(pin, EButtonUp);
+            listener->onButtonEvent(pin, EButtonClick);
         }
         else {
             // unlongpress
-            callback(pin, EButtonUnlongpress);
+            listener->onButtonEvent(pin, EButtonUnlongpress);
             longpress = false;
         }
         gPrevButton = BUTTON_NULL;
@@ -47,12 +47,12 @@ void Button::onButtonPressed() {
         // same pin still pressed
         if(longpress == false && (millis() - longpressTS) >= longpressDelay) {
             longpress = true;
-            callback(pin, EButtonLongpress);
+            listener->onButtonEvent(pin, EButtonLongpress);
         }
     }
     else {
         // new button pressed
-        callback(pin, EButtonDown);
+        listener->onButtonEvent(pin, EButtonDown);
         longpressTS = millis();
         gPrevButton = pin;
     }

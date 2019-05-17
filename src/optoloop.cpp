@@ -2,7 +2,7 @@
 #include "debug.h"
 
 Optoloop::Optoloop(uint8_t aButtonPin, uint8_t aOctocouplerPin, uint8_t aRelayPin, uint8_t aTempLEDPin, uint8_t aLatchLEDPin, uint16_t aLongpressDelayMS, uint8_t aAudioCutMS) {
-    button = new Button(aButtonPin, aLongpressDelayMS, NULL);
+    button = new Button(aButtonPin, aLongpressDelayMS, this);
     octocoupler_pin = aOctocouplerPin;
     relay_pin = aRelayPin;
     temp_led_pin = aTempLEDPin;
