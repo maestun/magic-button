@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "button.h"
+#include "optoloop.h"
 #include "debug.h"
 
 #define     PIN_BYPASS_IN           (6)
@@ -10,72 +10,11 @@
 #define     LONGPRESS_THRESHOLD_MS  (1000)
 #define     AUDIO_CUT_MS            (20)
 
-SButtonData gButton;
 
+Button *    gButton;
+Optoloop *  gLoopA;
+Optoloop *  gLoopB;
 
-// ============================================================================
-void FX_Toggle(bool aON, bool aTemp) {
-
-    // manage effect
-    digitalWrite(PIN_OCTOCOUPLER, HIGH);
-    digitalWrite(PIN_RELAY, aON);
-    delay(AUDIO_CUT_MS);
-    digitalWrite(PIN_OCTOCOUPLER, LOW);
-    
-    // manage display
-    if(aON) {
-        digitalWrite(PIN_LED_TEMP, aTemp);
-        digitalWrite(PIN_LED_TOGGLE, !aTemp);
-    }
-    else {
-        // turn LEDs off
-        digitalWrite(PIN_LED_TEMP, false);
-        digitalWrite(PIN_LED_TOGGLE, false);
-    }
-}
-
-
-// ============================================================================
-void onButtonEvent(uint8_t aPin, EButtonScanResult aResult) {
-    static bool fx_on = false;
-    static bool fx_disable = false;
-    if(aResult == EButtonDown) {
-        // button down: toggle fx on if it wasn't
-        dprintln(F("DOWN"));
-        if(!fx_on) {
-            fx_on = true;
-            fx_disable = false;
-            FX_Toggle(true, false);
-        }
-        else {
-            fx_disable = true;   
-        }
-    }
-    else if(aResult == EButtonLongpress) {
-        // button longpressed: switch to temporary mode
-        dprintln(F("LONG"));
-        FX_Toggle(true, true);
-    }
-    else if(aResult == EButtonUnlongpress) {
-        // button released from longpress, turn fx off
-        fx_on = false;
-        dprintln(F("UNLONG"));
-        FX_Toggle(false, false);
-    }
-    else if(aResult == EButtonClick) {
-        // button clicked: ignore
-        dprintln(F("CLICK"));
-        if(fx_on && fx_disable) {
-            fx_on = false;
-            FX_Toggle(false, false);
-        }
-    }
-    else if(aResult == EButtonUp) {
-        // button released from shortpress: turn fx off if it was on
-        dprintln(F("UP"));
-        
-    }
-}
 
 
 // ============================================================================
@@ -83,19 +22,15 @@ void setup() {
     dprintinit(9600);
     dprintln(F("BEGIN"));
 
-    pinMode(PIN_OCTOCOUPLER, OUTPUT);
-    pinMode(PIN_RELAY, OUTPUT);
-    pinMode(PIN_LED_TEMP, OUTPUT);
-    pinMode(PIN_LED_TOGGLE, OUTPUT);
-    
-    digitalWrite(PIN_OCTOCOUPLER, LOW);
-    digitalWrite(PIN_RELAY, LOW);
-
-    HW_SetupButton(&gButton, PIN_BYPASS_IN, LONGPRESS_THRESHOLD_MS, &onButtonEvent);
+    gButton = new Button(PIN_BYPASS_IN, LONGPRESS_THRESHOLD_MS, NULL);
+    gLoopA = new Optoloop(PIN_BYPASS_IN, PIN_OCTOCOUPLER, PIN_RELAY, PIN_LED_TEMP, PIN_LED_TOGGLE, LONGPRESS_THRESHOLD_MS, AUDIO_CUT_MS);
+    gLoopB = new Optoloop(PIN_BYPASS_IN, PIN_OCTOCOUPLER, PIN_RELAY, PIN_LED_TEMP, PIN_LED_TOGGLE, LONGPRESS_THRESHOLD_MS, AUDIO_CUT_MS);
 }
 
 
 void loop() {
-    HW_ScanButton(&gButton);
+    gButton->scan();
+    gLoopA->scan();
+    gLoopB->scan();
     delay(1);
 }

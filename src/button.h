@@ -15,19 +15,28 @@ typedef enum EButtonScanResult {
     EButtonDown,        // button is pressed
     EButtonClick,       // down then up events happened < longpress time
     EButtonLongpress,   // button help down for > longpress time
+    EButtonHold,        // button is still held after longpress
     EButtonUnlongpress  // button up from longpress
 } EButtonScanResult;
 
-// event_callback(pin, event)
-typedef void (*button_cb_t)(uint8_t, EButtonScanResult);
 
-typedef struct SButtonData {
-    uint8_t     pin;
-    bool        longpress;
-    uint32_t    longpressTS;
-    uint16_t    longpressDelay;
-    button_cb_t callback;
-} SButtonData;
+class ButtonListener {
+public:
+    virtual void onButtonEvent(uint8_t aPin, EButtonScanResult aResult) = 0;
+};
 
-void HW_SetupButton(SButtonData * aButton, uint8_t aPin, uint16_t aLongpressDelay, button_cb_t aCallback);
-void HW_ScanButton(SButtonData * aButton);
+class Button {
+private:
+    uint8_t             _pin;
+    uint8_t             _prevState;
+    bool                _longpressed;
+    uint32_t            _longpressTS;
+    uint32_t            _debounceTS;
+    uint16_t            _longpressMS;
+    ButtonListener *    _listener;
+    void                onButtonReleased();
+    void                onButtonPressed();
+public:
+    Button(uint8_t aPin, uint16_t aLongpressDelayMS, ButtonListener * aListener);
+    void scan();
+};

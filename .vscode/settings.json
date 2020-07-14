@@ -1,5 +1,0 @@
-{
-    "terminal.integrated.env.osx": {
-        "PATH": "/Users/olivier/.platformio/penv/bin:/usr/local/opt/node@6/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Applications/VMware Fusion.app/Contents/Public:/Users/olivier/dev/android/sdk/tools:/Users/olivier/dev/android/sdk/platform-tools"
-    }
-}
