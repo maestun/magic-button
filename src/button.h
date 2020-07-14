@@ -15,10 +15,10 @@ typedef enum EButtonScanResult {
     EButtonDown,        // button is pressed
     EButtonClick,       // down then up events happened < longpress time
     EButtonLongpress,   // button help down for > longpress time
+    EButtonHold,        // button is still held after longpress
     EButtonUnlongpress  // button up from longpress
 } EButtonScanResult;
 
-typedef void (*button_cb_t)(uint8_t, EButtonScanResult);
 
 class ButtonListener {
 public:
@@ -27,14 +27,16 @@ public:
 
 class Button {
 private:
-    uint8_t             pin;
-    bool                longpress;
-    uint32_t            longpressTS;
-    uint16_t            longpressDelay;
-    ButtonListener *    listener;
+    uint8_t             _pin;
+    uint8_t             _prevState;
+    bool                _longpressed;
+    uint32_t            _longpressTS;
+    uint32_t            _debounceTS;
+    uint16_t            _longpressMS;
+    ButtonListener *    _listener;
     void                onButtonReleased();
     void                onButtonPressed();
 public:
-    Button(uint8_t aPin, uint16_t aLongpressDelay, ButtonListener * aListener);
+    Button(uint8_t aPin, uint16_t aLongpressDelayMS, ButtonListener * aListener);
     void scan();
 };
