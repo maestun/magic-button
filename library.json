@@ -1,0 +1,11 @@
+{
+  "name": "magic-button",
+  "keywords": "arduino, button, bypass, pedals",
+  "description": "Your average relay bypass for effect pedals, with some tweaks.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maestun/magic-button"
+  },
+  "frameworks": "arduino",
+  "platforms": "*"
+}
