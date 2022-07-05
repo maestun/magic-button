@@ -13,7 +13,8 @@ static int8_t         gPrevButton = BUTTON_NULL;
 static int8_t         gState = BUTTON_NULL;
 
 
-Button::Button(uint8_t aPin, uint16_t aLongpressDelayMS, ButtonListener * aListener) {
+Button::Button(uint8_t aPin, uint16_t aLongpressDelayMS, IButtonListener * aListener) {
+
     pinMode(aPin, INPUT);
     _pin = aPin;
     _longpressed = false;
@@ -44,7 +45,6 @@ void Button::onButtonReleased() {
 }
 
 
-// TODO: implement debounce filter !!
 void Button::onButtonPressed() {
 
     // previous code w/ longpress detection
@@ -68,6 +68,7 @@ void Button::onButtonPressed() {
 
 
 void Button::scan() {
+    
     gState = digitalRead(_pin);
     if (gState != _prevState) {
         // reset the debouncing timer
