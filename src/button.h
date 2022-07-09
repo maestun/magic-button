@@ -10,6 +10,8 @@
 #include <stdint.h>
 #include <Arduino.h>
 
+static constexpr int8_t kPinNull = -1;
+
 typedef enum EButtonScanResult {
     EButtonUp = 0,      // off, idle state
     EButtonDown,        // button is pressed
@@ -38,6 +40,6 @@ private:
     void                onButtonPressed();
     
 public:
-    Button(uint8_t aPin, uint16_t aLongpressDelayMS, IButtonListener * aListener);
-    void scan();
+    Button(uint8_t aPin, uint16_t aLongpressDelayMS, IButtonListener * aListener, uint8_t aPinMode);
+    void tick();
 };

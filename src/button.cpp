@@ -7,15 +7,14 @@
 #include "button.h"
 
 
-static const uint8_t  DEBOUNCE_MS = 50;
-static const int8_t   BUTTON_NULL = -1;
-static int8_t         gPrevButton = BUTTON_NULL;
-static int8_t         gState = BUTTON_NULL;
+static constexpr uint8_t    kDebounceMS = 50;
+static int8_t               gPrevButton = kPinNull;
+static int8_t               gState = kPinNull;
 
 
-Button::Button(uint8_t aPin, uint16_t aLongpressDelayMS, IButtonListener * aListener) {
+Button::Button(uint8_t aPin, uint16_t aLongpressDelayMS, IButtonListener * aListener, uint8_t aPinMode = INPUT) {
 
-    pinMode(aPin, INPUT);
+    pinMode(aPin, aPinMode);
     _pin = aPin;
     _longpressed = false;
     _longpressMS= aLongpressDelayMS;
@@ -23,7 +22,7 @@ Button::Button(uint8_t aPin, uint16_t aLongpressDelayMS, IButtonListener * aList
     _debounceTS = 0;
     _listener = aListener;
     _prevState = LOW;
-    gPrevButton = BUTTON_NULL;
+    gPrevButton = kPinNull;
 }
 
 
@@ -40,7 +39,7 @@ void Button::onButtonReleased() {
             _listener->onButtonEvent(_pin, EButtonUnlongpress);
             _longpressed = false;
         }
-        gPrevButton = BUTTON_NULL;
+        gPrevButton = kPinNull;
     }
 }
 
@@ -67,7 +66,7 @@ void Button::onButtonPressed() {
 }
 
 
-void Button::scan() {
+void Button::tick() {
     
     gState = digitalRead(_pin);
     if (gState != _prevState) {
@@ -75,7 +74,7 @@ void Button::scan() {
         _debounceTS = millis();
     }
 
-    if ((millis() - _debounceTS) > DEBOUNCE_MS) {
+    if ((millis() - _debounceTS) > kDebounceMS) {
         // check state only if debounced
         if(gState == true) {
             // pressed
