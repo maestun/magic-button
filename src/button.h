@@ -10,7 +10,7 @@
 #include <stdint.h>
 #include <Arduino.h>
 
-static constexpr int8_t kPinNull = -1;
+static constexpr uint8_t kPinNull = 0xff;
 
 typedef enum EButtonScanResult {
     EButtonUp = 0,      // off, idle state
@@ -29,6 +29,7 @@ public:
 
 class Button {
 private:
+    bool                _pressed;
     uint8_t             _pin;
     uint8_t             _prevState;
     bool                _longpressed;

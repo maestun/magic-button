@@ -8,13 +8,20 @@
 
 
 static constexpr uint8_t    kDebounceMS = 50;
-static int8_t               gPrevButton = kPinNull;
-static int8_t               gState = kPinNull;
+static uint8_t              gPrevButton = kPinNull;
+static uint8_t              gState = kPinNull;
 
 
-Button::Button(uint8_t aPin, uint16_t aLongpressDelayMS, IButtonListener * aListener, uint8_t aPinMode = INPUT) {
+Button::Button(uint8_t aPin, 
+               uint16_t aLongpressDelayMS, 
+               IButtonListener * aListener, 
+               uint8_t aPinMode = INPUT) {
 
     pinMode(aPin, aPinMode);
+
+    // define 'pressed' value: 
+    // 'true' if pinMode is INPUT, 'false' if pinMode is INPUT_PULLUP
+    _pressed = (aPinMode == INPUT);
     _pin = aPin;
     _longpressed = false;
     _longpressMS= aLongpressDelayMS;
@@ -76,7 +83,7 @@ void Button::tick() {
 
     if ((millis() - _debounceTS) > kDebounceMS) {
         // check state only if debounced
-        if(gState == true) {
+        if(gState == _pressed) {
             // pressed
             onButtonPressed();
         }

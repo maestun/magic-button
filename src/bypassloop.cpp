@@ -2,11 +2,11 @@
 #include "debug.h"
 
 FootswitchBypass::FootswitchBypass(uint8_t aButtonPin, 
-                       uint8_t aRelayPin, 
-                       uint8_t aTempLEDPin, 
-                       uint8_t aLatchLEDPin, 
-                       uint16_t aLongpressDelayMS, 
-                       uint8_t aPinMode) {
+                                   uint8_t aRelayPin, 
+                                   uint8_t aTempLEDPin, 
+                                   uint8_t aLatchLEDPin, 
+                                   uint16_t aLongpressDelayMS, 
+                                   uint8_t aPinMode) {
     _button = new Button(aButtonPin, aLongpressDelayMS, this, aPinMode);
     _relay_pin = aRelayPin;
     _temp_led_pin = aTempLEDPin;
