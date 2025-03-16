@@ -57,3 +57,9 @@ void Footswitch::onButtonEvent(uint8_t aID, EButtonScanResult aResult) {
         } break;
     }
 }
+
+void Footswitch::enable(bool aEnable) {
+    _on = aEnable;
+    digitalWrite(_ledPin, aEnable);
+    _fptr(_id, aEnable);
+}

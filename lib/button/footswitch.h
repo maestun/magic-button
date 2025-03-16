@@ -44,6 +44,13 @@ public:
     void onButtonEvent(uint8_t aID, EButtonScanResult aResult);
     
     /**
+     * @brief Sets footswitch state by software
+     * 
+     * @param aEnable on/off
+     */
+    void enable(bool aEnable);
+
+    /**
      * @brief Construct a new Footswitch object
      * 
      * @param aPin digital pin attached to the button (see wiring above)
