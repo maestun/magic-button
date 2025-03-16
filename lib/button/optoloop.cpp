@@ -1,5 +1,4 @@
 #include "optoloop.h"
-#include "debug.h"
 
 Optoloop::Optoloop(uint8_t aButtonPin, uint8_t aOctocouplerPin, uint8_t aRelayPin, uint8_t aTempLEDPin, uint8_t aLatchLEDPin, uint16_t aLongpressDelayMS, uint8_t aAudioCutMS) {
     button = new Button(aButtonPin, aLongpressDelayMS, this);
@@ -44,7 +43,7 @@ void Optoloop::toggle(bool aON, bool aTemp) {
 void Optoloop::onButtonEvent(uint8_t aPin, EButtonScanResult aResult) {
     if(aResult == EButtonDown) {
         // button down: toggle fx on if it wasn't
-        dprintln(F("DOWN"));
+        // Serial.println(F("DOWN"));
         if(!fx_on) {
             fx_on = true;
             fx_disable = false;
@@ -56,18 +55,18 @@ void Optoloop::onButtonEvent(uint8_t aPin, EButtonScanResult aResult) {
     }
     else if(aResult == EButtonLongpress) {
         // button longpressed: switch to temporary mode
-        dprintln(F("LONG"));
+        // Serial.println(F("LONG"));
         toggle(true, true);
     }
     else if(aResult == EButtonUnlongpress) {
         // button released from longpress, turn fx off
         fx_on = false;
-        dprintln(F("UNLONG"));
+        // Serial.println(F("UNLONG"));
         toggle(false, false);
     }
     else if(aResult == EButtonClick) {
         // button clicked: turn fx off if it was on
-        dprintln(F("CLICK"));
+        // Serial.println(F("CLICK"));
         if(fx_on && fx_disable) {
             fx_on = false;
             toggle(false, false);
@@ -75,7 +74,7 @@ void Optoloop::onButtonEvent(uint8_t aPin, EButtonScanResult aResult) {
     }
     else if(aResult == EButtonUp) {
         // button released from shortpress: ignore
-        dprintln(F("UP"));  
+        // Serial.println(F("UP"));  
     }
 }
 
